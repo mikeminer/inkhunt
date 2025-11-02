@@ -91,7 +91,7 @@ Responsive UI • sci-fi theme ("Kraken Hunt")
 
 ⚙️ Local Development
 bash
-Copia codice
+
 git clone https://github.com/mikeminer/inkhunt
 cd inkhunt
 # open index.html locally OR
@@ -99,7 +99,7 @@ python3 -m http.server 8080
 Ensure your wallet is on:
 
 yaml
-Copia codice
+
 Network: Ink Mainnet
 Chain ID: 57073
 RPC (example): https://rpc-gel.inkonchain.com
