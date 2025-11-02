@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Kraken Hunt — Ink Mission Control (Gated)</title>
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/mikeminer/lineavoyage/refs/heads/main/icon.ico"/>
+<style>
+  :root{
+    /* Kraken Hunt — deep ocean + violet glow */
+    --abyss1:#070a1a; --abyss2:#0a0f2e; /* bg gradient */
+    --card:#0b1333; --glass:rgba(255,255,255,0.045);
+    --accent:#7b5cff; --accent2:#a99dff; /* violet */
+    --muted:#9fb3ff; --text:#e7eaff; /* ink-white */
+    --danger:#ff7b9e;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    color:var(--text);
+    background:
+      radial-gradient(900px 600px at 15% 15%, rgba(123,92,255,.10), transparent 40%),
+      radial-gradient(900px 600px at 85% 85%, rgba(123,92,255,.08), transparent 40%),
+      linear-gradient(180deg,var(--abyss1),var(--abyss2));
+    display:flex; align-items:center; justify-content:center; padding:28px;
+  }
+  .shell{ width:min(1200px,96vw); border-radius:18px; padding:20px; background:linear-gradient(180deg, rgba(123,92,255,.06), rgba(0,0,0,.06)); border:1px solid rgba(169,157,255,.22); box-shadow: 0 40px 80px rgba(5,6,20,.7); }
+  header{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .logo{ width:56px; height:56px; border-radius:14px; background:linear-gradient(180deg,#b9b1ff,#6c55ff); display:flex; align-items:center; justify-content:center; font-weight:900; color:#120c2a; box-shadow: 0 8px 22px rgba(108,85,255,0.35); }
+  h1{ margin:0; font-size:22px; letter-spacing:.4px; }
+  .tagline{ color:var(--muted); font-size:13px; margin-top:4px; }
+  .top-actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .pill{ background:rgba(123,92,255,0.12); padding:8px 12px; border-radius:999px; border:1px solid rgba(169,157,255,0.28); color:var(--accent2); font-weight:700; font-size:12px; }
+
+  .content{ display:grid; grid-template-columns: 1fr 420px; gap:16px; margin-top:16px; }
+  .panel{ background:var(--card); border-radius:14px; padding:14px; border:1px solid rgba(255,255,255,0.06); }
+  label{ display:block; color:var(--muted); font-size:13px; margin-bottom:6px; }
+  input[type=text], input[type=number], select{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:var(--text); font-size:14px; }
+  .controls{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  button{ cursor:pointer; border:none; padding:10px 14px; border-radius:12px; font-weight:900; background:linear-gradient(180deg,var(--accent),#5a42ff); color:#0e0a23; box-shadow:0 10px 30px rgba(90,66,255,0.35); }
+  button.ghost{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.08); box-shadow:none; }
+  button[disabled]{ opacity:.45; cursor:not-allowed; filter:grayscale(.2); }
+  .big{ padding:14px 18px; font-size:16px; border-radius:14px; }
+  .log{ height:420px; overflow:auto; padding:12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.008)); font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size:13px; color:#e6e6ff; }
+  .metrics{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-top:12px; }
+  .stat{ padding:12px; border-radius:12px; background:var(--glass); border:1px solid rgba(255,255,255,0.08); }
+  .small{ font-size:12px; color:var(--muted); }
+  .note{ font-size:12px; color:#d5d0ff; margin-top:8px; }
+  footer{ margin-top:12px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+
+  .banner{
+    padding:10px 12px; border-radius:10px; margin-bottom:12px; display:flex; gap:12px; align-items:center;
+    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06);
+  }
+  .banner.warn{ border-color: rgba(255,123,158,0.25); background: linear-gradient(90deg, rgba(255,123,158,0.06), rgba(255,255,255,0.01)); }
+  .banner a{ color:var(--accent2); font-weight:800; text-decoration:underline; }
+
+  /* Progress bar + kraken emoji */
+  .progressWrap{ margin:10px 0 6px; background:var(--glass); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:8px; }
+  .progressLabel{ display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .progressTrack{ height:10px; border-radius:999px; background:rgba(123,92,255,.20); overflow:hidden; position:relative; }
+  .progressBar{ height:100%; width:0%; background:linear-gradient(90deg, var(--accent), #5a42ff); box-shadow:0 0 14px rgba(123,92,255,.55); transition: width .35s ease; }
+  .progressRocket{ position:absolute; top:-8px; left:0; font-size:14px; filter: drop-shadow(0 0 6px rgba(123,92,255,.75)); transition: left .35s ease; pointer-events:none; }
+  .progressHint{ font-size:11px; color:#d5d0ff; opacity:.9; margin-top:4px; }
+
+  @media (max-width:980px){ .content{ grid-template-columns:1fr; } .log{ height:260px; } }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="logo">INK</div>
+        <div>
+          <h1>Kraken Hunt — Ink Mission Control</h1>
+          <div class="tagline">OP Stack L2 • EVM‑equivalent • Ink mainnet</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="pill">Theme: Kraken Hunt</div>
+        <div class="pill">Authorization Required: Citadel Spaceship — Base</div>
+      </div>
+    </header>
+
+    <div id="accessBanner" class="banner" style="display:none"></div>
+
+    <div class="content">
+      <!-- Left: controls -->
+      <div class="panel">
+        <h3 style="margin:0 0 8px">Launch a Hunt — Deploy & Measure 🐙⚓</h3>
+        <div class="small">Simulate a burst of on‑chain orders to stress‑test your starbase on <strong>Ink</strong>. Controlled thrust, zero on‑chain self‑replication.</div>
+
+        <div style="height:12px"></div>
+        <label>Starbase Deployment Portal on INK</label>
+        <input id="factoryAddress" placeholder="0x... (Factory with deployChild)"/>
+
+        <div style="height:8px"></div>
+        <label>Connection</label>
+        <div class="controls">
+          <select id="signerMode">
+            <option value="wallet">Browser Wallet (MetaMask / Rabby)</option>
+            <option value="pk">Private Key + RPC (local only)</option>
+          </select>
+          <input id="rpcUrl" placeholder="RPC (e.g. https://rpc-gel.inkonchain.com or http://127.0.0.1:8545)" style="width:48%"/>
+        </div>
+
+        <div style="height:8px"></div>
+        <input id="privateKey" placeholder="Private key (0x...) — keep it local & safe" style="display:none"/>
+
+        <hr style="opacity:.12; margin:12px 0"/>
+
+        <label>Hunt Plan</label>
+        <div class="controls" style="margin-bottom:8px">
+          <div style="flex:1">
+            <div class="small"># of Orders</div>
+            <input id="count" type="number" value="50" min="1"/>
+          </div>
+          <div style="width:160px">
+            <div class="small">ETH per Order</div>
+            <input id="valueEth" type="text" value="0.000"/>
+          </div>
+          <div style="width:150px">
+            <div class="small">Delay (ms) — sequential</div>
+            <input id="delayMs" type="number" value="50" min="0"/>
+          </div>
+          <div style="width:150px">
+            <div class="small">Mode</div>
+            <select id="parallel"><option value="0">Sequential</option><option value="1">Parallel</option></select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:8px">
+          <button id="connectBtn">Connect</button>
+          <button id="startBtn" class="ghost big" disabled>Start Hunt</button>
+          <button id="stopBtn" class="ghost" disabled>Abort</button>
+          <button id="downloadCsv" class="ghost" disabled>Download CSV</button>
+        </div>
+
+        <div class="note">⚠️ Use on infrastructure you control. This triggers <code>deployChild()</code> on your Factory and forwards ETH if set — it does <b>not</b> auto‑replicate on‑chain.</div>
+      </div>
+
+      <!-- Right: telemetry -->
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong>Telemetry</strong>
+            <div class="small">Watch orders, timings and gas as you prowl the depths.</div>
+          </div>
+          <div class="small">Elapsed: <span id="elapsed">0ms</span></div>
+        </div>
+
+        <div style="height:8px"></div>
+        <div class="log" id="log" aria-live="polite"></div>
+
+        <!-- Progress bar -->
+        <div class="progressWrap" id="progressWrap">
+          <div class="progressLabel">
+            <span>Session progress (toward 50)</span>
+            <span id="progressText">0 / 50</span>
+          </div>
+          <div class="progressTrack">
+            <div class="progressBar" id="progressBar"></div>
+            <div class="progressRocket" id="progressRocket">🦑</div>
+          </div>
+          <div class="progressHint" id="progressHint">New tier every 50 successful orders. Release the kraken.</div>
+        </div>
+
+        <div class="metrics">
+          <div class="stat"><div class="small">Connected</div><div id="connected" style="font-weight:900">No</div></div>
+          <div class="stat"><div class="small">Account</div><div id="account" style="font-weight:900">—</div></div>
+          <div class="stat"><div class="small">Total tx</div><div id="m_total">0</div></div>
+          <div class="stat"><div class="small">Success</div><div id="m_success">0</div></div>
+          <div class="stat"><div class="small">Failed</div><div id="m_failed">0</div></div>
+          <div class="stat"><div class="small">Total gas</div><div id="m_gas">0</div></div>
+        </div>
+
+        <div style="height:8px"></div>
+        <div class="small">Tip: start with one order to validate your Factory & params before going full hunt.</div>
+      </div>
+    </div>
+
+    <footer>
+      <div>© Kraken Hunt — Ink Mission Control (Gated) • For private testing & research</div>
+      <div class="small">Ink Mainnet • Chain ID <code>57073</code> • Explorer: <code>explorer.inkonchain.com</code></div>
+    </footer>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<script>
+(function(){
+  // ==== Network constants (INK MAINNET) ====
+  const INK_CHAIN_ID = 57073n; // Ink mainnet chainId (EVM)
+  const INK_PUBLIC_RPC = "https://rpc-gel.inkonchain.com"; // primary public RPC
+
+  // ==== NFT gating on BASE (required) ====
+  // User must hold The Citadel Spaceship NFT on Base
+  const NFT_ADDRESS = "0x67e2f3a9b7fe9979e3b4a5e557b59e9c93331c4f".toLowerCase();
+  const OPENSEA_URL = "https://opensea.io/collection/0x0df998573b34a1a2932998a8376052f230ef8e92/overview";
+  const BASE_RPC = "https://mainnet.base.org"; // read-only provider for ownership checks
+  const MARKET_URL = OPENSEA_URL; // reuse existing variable for banner link
+
+  const FACTORY_PREFILL = ""; // optional demo address // optional demo address
+
+  const $ = id => document.getElementById(id);
+  const connectBtn = $('connectBtn'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), downloadCsv = $('downloadCsv');
+  const logEl = $('log'), connectedEl = $('connected'), accountEl = $('account'), banner = $('accessBanner');
+
+  let provider, signer, walletAddress = null;
+  let baseReadProvider = new ethers.JsonRpcProvider(BASE_RPC);
+  let STOP = false;
+  let results = [];
+
+  // Prefill factory and set initial access
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const el = $('factoryAddress'); if(el && !el.value) el.value = FACTORY_PREFILL;
+    // Initially buttons disabled until connect & (optional) ownership check
+    setAccess(false);
+  });
+
+  function appendLog(msg){
+    const el = document.createElement('div');
+    el.textContent = `[${(new Date()).toISOString()}] ${msg}`;
+    logEl.prepend(el);
+  }
+  function setConnected(ok, addr){ connectedEl.textContent = ok ? 'Yes' : 'No'; accountEl.textContent = addr || '—'; }
+
+  function setAccess(allowed, detailsText){
+    startBtn.disabled = !allowed;
+    downloadCsv.disabled = !allowed;
+    stopBtn.disabled = !allowed;
+
+    if(!allowed){
+      banner.style.display = 'flex';
+      banner.className = 'banner ' + (NFT_ADDRESS ? 'warn' : '');
+      if(NFT_ADDRESS){
+        banner.innerHTML = `<div style="flex:1">You must hold <strong>The Citadel Spaceship<\/strong> NFT on <strong>Base<\/strong> to use this dApp.</div>
+                            <div>${MARKET_URL && MARKET_URL !== '#' ? `<a href="${MARKET_URL}" target="_blank" rel="noopener">Get a Pass ↗</a>` : ''}</div>`;
+        startBtn.onclick = () => { if(MARKET_URL && MARKET_URL !== '#') window.open(MARKET_URL, '_blank'); };
+        downloadCsv.onclick = () => { alert('Download disabled: you need the gating NFT.'); };
+        stopBtn.onclick = () => { appendLog('Abort disabled: no access.'); };
+      } else {
+        // Gating disabled — instructional banner
+        banner.innerHTML = `<div style="flex:1">Gating is <strong>disabled</strong> in this demo. Set <code>NFT_ADDRESS</code> in the script to turn it on.</div>`;
+        startBtn.onclick = startSequence;
+        downloadCsv.onclick = downloadCsvHandler;
+        stopBtn.onclick = () => { STOP = true; appendLog('Abort requested'); stopBtn.disabled = true; };
+      }
+    } else {
+      banner.style.display = 'none';
+      startBtn.onclick = startSequence; // bind actual function defined later
+      downloadCsv.onclick = downloadCsvHandler;
+      stopBtn.onclick = () => { STOP = true; appendLog('Abort requested'); stopBtn.disabled = true; };
+    }
+  }
+
+  async function assertInk(p){
+    const net = await p.getNetwork();
+    if (net.chainId !== INK_CHAIN_ID) throw new Error("Please switch to Ink (chainId 57073).");
+  }
+
+  // Optional: Check ERC-721 ownership on Ink via read-only provider
+  async function checkOwnershipOnInk(addr){
+    try{
+      if(!addr) return false;
+      const erc721 = new ethers.Contract(NFT_ADDRESS, ['function balanceOf(address) view returns (uint256)'], baseReadProvider);
+      const bal = await erc721.balanceOf(addr);
+      const n = Number(bal.toString ? bal.toString() : bal);
+      return n > 0;
+    }catch(e){
+      console.warn('Ownership check failed:', e);
+      return false;
+    }
+  }catch(e){
+      console.warn('Ownership check failed:', e);
+      return false;
+    }
+  }
+
+  connectBtn.onclick = async () => {
+    try {
+      const mode = $('signerMode').value;
+      if(mode === 'wallet'){
+        if(!window.ethereum) throw new Error('No provider in window.ethereum — install MetaMask or Rabby');
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        await assertInk(provider);
+        signer = await provider.getSigner();
+        walletAddress = await signer.getAddress();
+        setConnected(true, walletAddress);
+        appendLog('Connected via wallet: ' + walletAddress);
+      } else {
+        const rpc = $('rpcUrl').value.trim();
+        const pk = $('privateKey').value.trim();
+        if(!rpc) throw new Error('Please provide RPC URL for Private Key mode');
+        if(!pk) throw new Error('Please provide a private key (local testing only)');
+        provider = new ethers.JsonRpcProvider(rpc);
+        // Optionally enforce Ink network here:
+        // await assertInk(provider);
+        signer = new ethers.Wallet(pk, provider);
+        walletAddress = await signer.getAddress();
+        setConnected(true, walletAddress);
+        appendLog('Connected via Private Key: ' + walletAddress + ' @ ' + rpc);
+      }
+
+      // ownership check on Ink (read-only)
+      appendLog('Checking gating NFT ownership on Base...');
+      const has = await checkOwnershipOnInk(walletAddress);
+      if(has){
+        appendLog('Ownership confirmed — access granted.');
+        setAccess(true);
+      } else {
+        appendLog('No gating NFT found — access locked.');
+        setAccess(false);
+      }
+
+      // set session progress to 0 on connect
+      updateProgressBar(0);
+    } catch(e){
+      appendLog('Connection error: ' + (e.message || e));
+      setConnected(false, null);
+      setAccess(false);
+    }
+  };
+
+  // ---- Factory ABI & tx logic ----
+  const FACTORY_ABI = ['function deployChild() external payable returns (address)'];
+
+  async function sendDeploy(factoryAddr, valueWei){
+    const contract = new ethers.Contract(factoryAddr, FACTORY_ABI, signer);
+    return await contract.deployChild({ value: valueWei });
+  }
+
+  // helper: download CSV (bound to button when access granted)
+  function downloadCsvHandler(){
+    if(results.length === 0){ alert('No results to download'); return; }
+    const header = ['index','ok','txHash','gasUsed','timeMs','timestamp','error'];
+    const rows = results.map(r => [ r.index, r.ok, r.txHash||'', r.gasUsed||'', r.timeMs||'', r.timestamp||'', r.error ? r.error.replace(/[\r\n]+/g,' ') : '' ]);
+    const csv = [header, ...rows].map(r => r.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'ink_hunt_benchmark.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // progress UI
+  function updateProgressBar(successCount){
+    const pb = $('progressBar');
+    const pt = $('progressText');
+    const hint = $('progressHint');
+    const rocket = $('progressRocket');
+    if(!pb || !pt) return;
+    const cap = 50;
+    const within = successCount % cap;
+    const pct = Math.min(100, Math.round((within / cap) * 100));
+    pb.style.width = pct + '%';
+    pt.textContent = `${within} / ${cap}`;
+    if(rocket){
+      const offsetPx = 10;
+      rocket.style.left = `calc(${pct}% - ${offsetPx}px)`;
+    }
+    hint.textContent = `New tier every 50 successful orders. Current session: ${successCount}.`;
+  }
+
+  // main runner
+  async function startSequence(){
+    STOP = false;
+    results = [];
+    $('m_total').textContent = '0'; $('m_success').textContent = '0'; $('m_failed').textContent = '0'; $('m_gas').textContent = '0';
+    updateProgressBar(0);
+
+    const factory = $('factoryAddress').value.trim();
+    if(!factory){ alert('Enter Factory address first'); return; }
+    if(!signer){ alert('Connect a signer first'); return; }
+
+    const count = Math.max(1, Number(($('count').value||'1')));
+    const valueEth = $('valueEth').value || '0';
+    let valueWei; try{ valueWei = ethers.parseEther(String(valueEth)); }catch(e){ alert('Invalid ETH value'); return; }
+    const parallel = $('parallel').value === '1';
+    const delayMs = Number($('delayMs').value || 0);
+
+    appendLog(`Hunting: ${count} orders — value ${valueEth} ETH — mode: ${parallel ? 'PARALLEL' : 'SEQUENTIAL'}`);
+
+    const start = Date.now();
+    if(parallel){
+      const promises = [];
+      for(let i=0;i<count;i++){
+        if(STOP) break;
+        promises.push((async (idx)=>{
+          const t0 = Date.now();
+          try{
+            const tx = await sendDeploy(factory, valueWei);
+            const receipt = await tx.wait();
+            const gasUsed = Number(receipt.gasUsed.toString());
+            const took = Date.now() - t0;
+            appendLog(`OK #${idx+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`);
+            results.push({ index: idx+1, ok:true, txHash: receipt.hash, gasUsed, timeMs: took, timestamp: Date.now() });
+            updateMetrics();
+          }catch(err){
+            appendLog(`ERR #${idx+1} ${(err && err.message) ? err.message : String(err)}`);
+            results.push({ index: idx+1, ok:false, error: (err && err.message) || String(err), timeMs: Date.now() });
+            updateMetrics();
+          }
+        })(i));
+      }
+      await Promise.all(promises);
+    } else {
+      for(let i=0;i<count;i++){
+        if(STOP) break;
+        const t0 = Date.now();
+        try{
+          const tx = await sendDeploy(factory, valueWei);
+          const receipt = await tx.wait();
+          const gasUsed = Number(receipt.gasUsed.toString());
+          const took = Date.now() - t0;
+          appendLog(`OK #${i+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`);
+          results.push({ index: i+1, ok:true, txHash: receipt.hash, gasUsed, timeMs: took, timestamp: Date.now() });
+          updateMetrics();
+        }catch(err){
+          appendLog(`ERR #${i+1} ${(err && err.message) ? err.message : String(err)}`);
+          results.push({ index: i+1, ok:false, error: (err && err.message) || String(err), timeMs: Date.now() });
+          updateMetrics();
+        }
+        if(delayMs) await new Promise(r=>setTimeout(r, delayMs));
+      }
+    }
+
+    const elapsed = Date.now() - start;
+    $('elapsed').textContent = elapsed + 'ms';
+    appendLog('Hunt complete — elapsed ' + elapsed + 'ms');
+    stopBtn.disabled = true;
+  }
+
+  function updateMetrics(){
+    const total = results.length;
+    const succ = results.filter(r=>r.ok).length;
+    const fail = total - succ;
+    const gas = results.filter(r=>r.ok).reduce((s,r)=> s + (r.gasUsed||0), 0);
+    $('m_total').textContent = total;
+    $('m_success').textContent = succ;
+    $('m_failed').textContent = fail;
+    $('m_gas').textContent = gas;
+    stopBtn.disabled = false;
+    updateProgressBar(succ);
+  }
+
+  // initially bind a friendly handler so button doesn't throw when gated
+  startBtn.onclick = () => { alert('Connect your wallet and hold The Citadel Spaceship NFT on Base to unlock this feature.'); };
+  downloadCsv.onclick = () => { alert('Connect first to unlock downloads.'); };
+
+})();
+</script>
+</body>
+</html>
