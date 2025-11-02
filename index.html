@@ -1,28 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Kraken Hunt — Ink Mission Control (Gated)</title>
-  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/mikeminer/inkhunt/refs/heads/main/faviconk.ico"/>
+<title>🦑 Kraken Hunt — Ink Mission Control</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='10' y='70' font-size='70'>🦑</text></svg>">
 <style>
   :root{
-    /* Kraken Hunt — deep ocean + violet glow */
-    --abyss1:#070a1a; --abyss2:#0a0f2e; /* bg gradient */
-    --card:#0b1333; --glass:rgba(255,255,255,0.045);
-    --accent:#7b5cff; --accent2:#a99dff; /* violet */
-    --muted:#9fb3ff; --text:#e7eaff; /* ink-white */
-    --danger:#ff7b9e;
+    --bg1:#060815; --bg2:#0a0f2e; --card:#0b1333; --glass:rgba(255,255,255,0.045);
+    --accent:#7b5cff; --accent2:#a99dff; --muted:#9fb3ff; --txt:#e7eaff; --danger:#ff7b9e; --ok:#6dffb3;
   }
   *{box-sizing:border-box}
+  html,body{height:100%}
   body{
-    margin:0; min-height:100vh; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    color:var(--text);
+    margin:0; color:var(--txt); font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
     background:
       radial-gradient(900px 600px at 15% 15%, rgba(123,92,255,.10), transparent 40%),
       radial-gradient(900px 600px at 85% 85%, rgba(123,92,255,.08), transparent 40%),
-      linear-gradient(180deg,var(--abyss1),var(--abyss2));
-    display:flex; align-items:center; justify-content:center; padding:28px;
+      linear-gradient(180deg,var(--bg1),var(--bg2));
+    min-height:100%; display:flex; align-items:center; justify-content:center; padding:24px;
   }
   .shell{ width:min(1200px,96vw); border-radius:18px; padding:20px; background:linear-gradient(180deg, rgba(123,92,255,.06), rgba(0,0,0,.06)); border:1px solid rgba(169,157,255,.22); box-shadow: 0 40px 80px rgba(5,6,20,.7); }
   header{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
@@ -36,7 +32,7 @@
   .content{ display:grid; grid-template-columns: 1fr 420px; gap:16px; margin-top:16px; }
   .panel{ background:var(--card); border-radius:14px; padding:14px; border:1px solid rgba(255,255,255,0.06); }
   label{ display:block; color:var(--muted); font-size:13px; margin-bottom:6px; }
-  input[type=text], input[type=number], select{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:var(--text); font-size:14px; }
+  input[type=text], input[type=number], select{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:var(--txt); font-size:14px; }
   .controls{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
   .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
   button{ cursor:pointer; border:none; padding:10px 14px; border-radius:12px; font-weight:900; background:linear-gradient(180deg,var(--accent),#5a42ff); color:#0e0a23; box-shadow:0 10px 30px rgba(90,66,255,0.35); }
@@ -50,14 +46,10 @@
   .note{ font-size:12px; color:#d5d0ff; margin-top:8px; }
   footer{ margin-top:12px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
 
-  .banner{
-    padding:10px 12px; border-radius:10px; margin-bottom:12px; display:flex; gap:12px; align-items:center;
-    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06);
-  }
+  .banner{ padding:10px 12px; border-radius:10px; margin-bottom:12px; display:flex; gap:12px; align-items:center; background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06); }
   .banner.warn{ border-color: rgba(255,123,158,0.25); background: linear-gradient(90deg, rgba(255,123,158,0.06), rgba(255,255,255,0.01)); }
   .banner a{ color:var(--accent2); font-weight:800; text-decoration:underline; }
 
-  /* Progress bar + kraken emoji */
   .progressWrap{ margin:10px 0 6px; background:var(--glass); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:8px; }
   .progressLabel{ display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted); margin-bottom:6px; }
   .progressTrack{ height:10px; border-radius:999px; background:rgba(123,92,255,.20); overflow:hidden; position:relative; }
@@ -75,7 +67,7 @@
         <div class="logo">INK</div>
         <div>
           <h1>Kraken Hunt — Ink Mission Control</h1>
-          <div class="tagline">OP Stack L2 • EVM‑equivalent • Ink mainnet</div>
+          <div class="tagline">OP Stack L2 • EVM‑equivalent • Ink Mainnet</div>
         </div>
       </div>
       <div class="top-actions">
@@ -89,45 +81,44 @@
     <div class="content">
       <!-- Left: controls -->
       <div class="panel">
-        <h3 style="margin:0 0 8px">Launch a Hunt — Deploy & Measure 🐙⚓</h3>
-        <div class="small">Simulate a burst of on‑chain orders to stress‑test your starbase on <strong>Ink</strong>. Controlled thrust, zero on‑chain self‑replication.</div>
+        <h3 style="margin:0 0 8px">Launch a Hunt — Deploy & Measure 🦑⚓</h3>
+        <div class="small">Esegui on‑chain burst verso la tua Factory su <strong>Ink</strong> e misura latenza, gas, successi/fallimenti. Nessuna auto‑replicazione on‑chain.</div>
 
         <div style="height:12px"></div>
-        <label>Starbase Deployment Portal on INK</label>
-        <input id="factoryAddress" placeholder="0x... (Factory with deployChild)"/>
+        <label>Factory su INK (deployChild)</label>
+        <input id="factoryAddress" value="0x10305c233bd96fF9C1dac42636ABBEFa341C7d13"/>
 
         <div style="height:8px"></div>
-        <label>Connection</label>
+        <label>Connessione</label>
         <div class="controls">
           <select id="signerMode">
             <option value="wallet">Browser Wallet (MetaMask / Rabby)</option>
-            <option value="pk">Private Key + RPC (local only)</option>
+            <option value="pk">Private Key + RPC (locale)</option>
           </select>
-          <input id="rpcUrl" placeholder="RPC (e.g. https://rpc-gel.inkonchain.com or http://127.0.0.1:8545)" style="width:48%"/>
+          <input id="rpcUrl" placeholder="RPC (es. https://rpc-gel.inkonchain.com o http://127.0.0.1:8545)" style="width:48%"/>
         </div>
-
         <div style="height:8px"></div>
-        <input id="privateKey" placeholder="Private key (0x...) — keep it local & safe" style="display:none"/>
+        <input id="privateKey" placeholder="Private key (0x...) — resta locale e sicura" style="display:none"/>
 
         <hr style="opacity:.12; margin:12px 0"/>
 
-        <label>Hunt Plan</label>
+        <label>Piano di Caccia</label>
         <div class="controls" style="margin-bottom:8px">
           <div style="flex:1">
-            <div class="small"># of Orders</div>
-            <input id="count" type="number" value="50" min="1"/>
+            <div class="small"># Ordini</div>
+            <input id="count" type="number" value="25" min="1"/>
           </div>
           <div style="width:160px">
-            <div class="small">ETH per Order</div>
+            <div class="small">ETH per Ordine</div>
             <input id="valueEth" type="text" value="0.000"/>
           </div>
           <div style="width:150px">
-            <div class="small">Delay (ms) — sequential</div>
+            <div class="small">Delay (ms) — sequenziale</div>
             <input id="delayMs" type="number" value="50" min="0"/>
           </div>
           <div style="width:150px">
-            <div class="small">Mode</div>
-            <select id="parallel"><option value="0">Sequential</option><option value="1">Parallel</option></select>
+            <div class="small">Modalità</div>
+            <select id="parallel"><option value="0">Sequenziale</option><option value="1">Parallela</option></select>
           </div>
         </div>
 
@@ -139,7 +130,7 @@
           <button id="downloadCsv" class="ghost" disabled>Download CSV</button>
         </div>
 
-        <div class="note">⚠️ Use on infrastructure you control. This triggers <code>deployChild()</code> on your Factory and forwards ETH if set — it does <b>not</b> auto‑replicate on‑chain.</div>
+        <div class="note">⚠️ Usa solo infrastruttura che controlli. Il dApp chiama <code>deployChild()</code> sulla tua Factory e inoltra ETH se impostato — <b>non</b> auto‑replica on‑chain.</div>
       </div>
 
       <!-- Right: telemetry -->
@@ -147,7 +138,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>Telemetry</strong>
-            <div class="small">Watch orders, timings and gas as you prowl the depths.</div>
+            <div class="small">Ordini, timing e gas mentre cacci nelle profondità.</div>
           </div>
           <div class="small">Elapsed: <span id="elapsed">0ms</span></div>
         </div>
@@ -155,17 +146,16 @@
         <div style="height:8px"></div>
         <div class="log" id="log" aria-live="polite"></div>
 
-        <!-- Progress bar -->
         <div class="progressWrap" id="progressWrap">
           <div class="progressLabel">
-            <span>Session progress (toward 50)</span>
+            <span>Session progress (verso 50)</span>
             <span id="progressText">0 / 50</span>
           </div>
           <div class="progressTrack">
             <div class="progressBar" id="progressBar"></div>
             <div class="progressRocket" id="progressRocket">🦑</div>
           </div>
-          <div class="progressHint" id="progressHint">New tier every 50 successful orders. Release the kraken.</div>
+          <div class="progressHint" id="progressHint">Nuovo tier ogni 50 successi. Release the Kraken.</div>
         </div>
 
         <div class="metrics">
@@ -178,12 +168,12 @@
         </div>
 
         <div style="height:8px"></div>
-        <div class="small">Tip: start with one order to validate your Factory & params before going full hunt.</div>
+        <div class="small">Tip: prova 1 ordine per validare Factory & parametri prima di spingere al massimo.</div>
       </div>
     </div>
 
     <footer>
-      <div>© Kraken Hunt — Ink Mission Control (Gated) • For private testing & research</div>
+      <div>© Kraken Hunt — Ink Mission Control • Solo test & ricerca</div>
       <div class="small">Ink Mainnet • Chain ID <code>57073</code> • Explorer: <code>explorer.inkonchain.com</code></div>
     </footer>
   </div>
@@ -191,318 +181,109 @@
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 <script>
 (function(){
-  // ==== Network constants (INK MAINNET) ====
-  const INK_CHAIN_ID = 57073n; // Ink mainnet chainId (EVM)
-  const INK_PUBLIC_RPC = "https://rpc-gel.inkonchain.com"; // primary public RPC
+  // ===== INK network =====
+  const INK_CHAIN_ID = 57073n;            // decimal
+  const INK_CHAIN_ID_HEX = '0xdef1';      // hex for wallet_* methods
+  const INK_RPC = 'https://rpc-gel.inkonchain.com';
+  const INK_EXPLORER = 'https://explorer.inkonchain.com';
 
-  // ==== NFT gating on BASE (required) ====
-  // User must hold The Citadel Spaceship NFT on Base
-  const NFT_ADDRESS = "0x67e2f3a9b7fe9979e3b4a5e557b59e9c93331c4f".toLowerCase();
-  const OPENSEA_URL = "https://opensea.io/collection/0x0df998573b34a1a2932998a8376052f230ef8e92/overview";
-  const BASE_RPC = "https://mainnet.base.org"; // read-only provider for ownership checks
-  const MARKET_URL = OPENSEA_URL; // reuse existing variable for banner link
+  // ===== Strict NFT gate on BASE (original requirement) =====
+  const NFT_ADDRESS = '0x67e2f3a9b7fe9979e3b4a5e557b59e9c93331c4f'.toLowerCase(); // The Citadel Spaceship
+  const BASE_RPC = 'https://mainnet.base.org';
+  const OPENSEA_URL = 'https://opensea.io/collection/0x0df998573b34a1a2932998a8376052f230ef8e92/overview';
 
-  const FACTORY_PREFILL = "0x10305c233bd96fF9C1dac42636ABBEFa341C7d13"; // optional demo address // optional demo address
+  // ===== Factory (on INK) =====
+  const FACTORY_ADDRESS_DEFAULT = '0x10305c233bd96fF9C1dac42636ABBEFa341C7d13';
+  const FACTORY_ABI = [ 'function deployChild() external payable returns (address)' ];
 
   const $ = id => document.getElementById(id);
-  const connectBtn = $('connectBtn'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), downloadCsv = $('downloadCsv');
+  const connectBtn = $('connectBtn'), addNetBtn = $('addNetBtn'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), downloadCsv = $('downloadCsv');
   const logEl = $('log'), connectedEl = $('connected'), accountEl = $('account'), banner = $('accessBanner');
-  const addNetBtn = $('addNetBtn');
 
   let provider, signer, walletAddress = null;
   let baseReadProvider = new ethers.JsonRpcProvider(BASE_RPC);
-  let STOP = false;
-  let results = [];
+  let STOP = false; let results = [];
 
-  // Prefill factory and set initial access
-  window.addEventListener('DOMContentLoaded', ()=>{
-    const el = $('factoryAddress'); if(el && !el.value) el.value = FACTORY_PREFILL;
-    setAccess(false);
-    // toggle inputs for signer mode
-    const modeSel = $('signerMode');
-    const pkEl = $('privateKey');
-    const rpcEl = $('rpcUrl');
-    function syncMode(){
-      const mode = modeSel.value;
-      if(pkEl) pkEl.style.display = (mode === 'pk') ? '' : 'none';
-      if(rpcEl) rpcEl.placeholder = (mode === 'pk') ? 'RPC (e.g. https://rpc-gel.inkonchain.com or http://127.0.0.1:8545)' : 'RPC (optional)';
-    }
-    if(modeSel){
-      modeSel.addEventListener('change', syncMode);
-      syncMode();
-    }
-  });
-
-  function appendLog(msg){
-    const el = document.createElement('div');
-    el.textContent = `[${(new Date()).toISOString()}] ${msg}`;
-    logEl.prepend(el);
-  }
+  // ===== UI helpers =====
+  function appendLog(msg){ const el = document.createElement('div'); el.textContent = `[${(new Date()).toISOString()}] ${msg}`; logEl.prepend(el); }
   function setConnected(ok, addr){ connectedEl.textContent = ok ? 'Yes' : 'No'; accountEl.textContent = addr || '—'; }
+  function updateProgressBar(successCount){
+    const cap = 50; const within = successCount % cap; const pct = Math.min(100, Math.round((within / cap) * 100));
+    $('progressBar').style.width = pct + '%'; $('progressText').textContent = `${within} / ${cap}`; $('progressRocket').style.left = `calc(${pct}% - 10px)`; $('progressHint').textContent = `Nuovo tier ogni 50 successi. Sessione: ${successCount}.`;
+  }
+  function updateMetrics(){ const total = results.length; const succ = results.filter(r=>r.ok).length; const gas = results.filter(r=>r.ok).reduce((s,r)=> s + (r.gasUsed||0), 0); $('m_total').textContent = total; $('m_success').textContent = succ; $('m_failed').textContent = total - succ; $('m_gas').textContent = gas; stopBtn.disabled = false; updateProgressBar(succ); }
 
-  function setAccess(allowed, detailsText){
-    startBtn.disabled = !allowed;
-    downloadCsv.disabled = !allowed;
-    stopBtn.disabled = !allowed;
-
+  function setAccess(allowed){
+    startBtn.disabled = !allowed; downloadCsv.disabled = !allowed; stopBtn.disabled = !allowed;
     if(!allowed){
-      banner.style.display = 'flex';
-      banner.className = 'banner ' + (NFT_ADDRESS ? 'warn' : '');
-      if(NFT_ADDRESS){
-        banner.innerHTML = `<div style="flex:1">You must hold <strong>The Citadel Spaceship<\/strong> NFT on <strong>Base<\/strong> to use this dApp.</div>
-                            <div>${MARKET_URL && MARKET_URL !== '#' ? `<a href="${MARKET_URL}" target="_blank" rel="noopener">Get a Pass ↗</a>` : ''}</div>`;
-        startBtn.onclick = () => { if(MARKET_URL && MARKET_URL !== '#') window.open(MARKET_URL, '_blank'); };
-        downloadCsv.onclick = () => { alert('Download disabled: you need the gating NFT.'); };
-        stopBtn.onclick = () => { appendLog('Abort disabled: no access.'); };
-      } else {
-        // Gating disabled — instructional banner
-        banner.innerHTML = `<div style="flex:1">Gating is <strong>disabled</strong> in this demo. Set <code>NFT_ADDRESS</code> in the script to turn it on.</div>`;
-        startBtn.onclick = startSequence;
-        downloadCsv.onclick = downloadCsvHandler;
-        stopBtn.onclick = () => { STOP = true; appendLog('Abort requested'); stopBtn.disabled = true; };
-      }
-    } else {
-      banner.style.display = 'none';
-      startBtn.onclick = startSequence; // bind actual function defined later
-      downloadCsv.onclick = downloadCsvHandler;
-      stopBtn.onclick = () => { STOP = true; appendLog('Abort requested'); stopBtn.disabled = true; };
-    }
+      banner.style.display = 'flex'; banner.className = 'banner warn';
+      banner.innerHTML = `<div style="flex:1">Devi possedere <strong>The Citadel Spaceship</strong> NFT su <strong>Base</strong> per usare questa dApp.</div><div><a href="${OPENSEA_URL}" target="_blank" rel="noopener">Compra su OpenSea ↗</a></div>`;
+      startBtn.onclick = () => window.open(OPENSEA_URL, '_blank'); downloadCsv.onclick = () => alert('Download disabilitato: serve l\'NFT.'); stopBtn.onclick = () => appendLog('Abort disabilitato: no accesso.');
+    } else { banner.style.display = 'none'; startBtn.onclick = startSequence; downloadCsv.onclick = downloadCsvHandler; stopBtn.onclick = () => { STOP = true; appendLog('Abort richiesto'); stopBtn.disabled = true; }; }
   }
 
-  async function assertInk(p){
-    const net = await p.getNetwork();
-    if (net.chainId !== INK_CHAIN_ID) throw new Error("Please switch to Ink (chainId 57073).");
-  }
-
-  // Ensure the user's wallet is on Ink; if not, attempt to switch/add it
+  // ===== Wallet helpers =====
   async function ensureInkNetwork(){
-    const ethereum = window.ethereum;
-    if(!ethereum) throw new Error('No provider in window.ethereum — install MetaMask or Rabby');
-    try{
-      await ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:'0xdef1' }] });
-    }catch(switchErr){
-      if(switchErr && switchErr.code === 4902){
-        await ethereum.request({ method:'wallet_addEthereumChain', params:[{
-          chainId: '0xdef1',
-          chainName: 'Ink',
-          rpcUrls: ['https://rpc-gel.inkonchain.com'],
-          nativeCurrency: { name:'Ether', symbol:'ETH', decimals:18 },
-          blockExplorerUrls: ['https://explorer.inkonchain.com']
-        }]});
-      } else {
-        throw switchErr;
-      }
-    }
+    const ethereum = window.ethereum; if(!ethereum) throw new Error('Nessun provider in window.ethereum — installa MetaMask o Rabby');
+    try{ await ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId: INK_CHAIN_ID_HEX }] }); }
+    catch(err){ if(err && err.code === 4902){ await ethereum.request({ method:'wallet_addEthereumChain', params:[{ chainId: INK_CHAIN_ID_HEX, chainName:'Ink', rpcUrls:[INK_RPC], nativeCurrency:{name:'Ether', symbol:'ETH', decimals:18}, blockExplorerUrls:[INK_EXPLORER] }]}); } else { throw err; } }
   }
+  async function assertInk(p){ const net = await p.getNetwork(); if (net.chainId !== INK_CHAIN_ID) throw new Error('Per favore passa a Ink (chainId 57073).'); }
 
-  // Add/switch Ink Network button
-  if (addNetBtn) {
-    addNetBtn.onclick = async ()=>{
-      try{
-        appendLog('Requesting wallet to add/switch to Ink network...');
-        await ensureInkNetwork();
-        appendLog('Ink network is ready in wallet.');
-        alert('Ink network added/switched successfully.');
-      }catch(e){
-        appendLog('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e)));
-        alert('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e)));
-      }
-    };
-  }
-  }
+  // ===== Gating on Base =====
+  async function checkOwnershipOnBase(addr){ try{ if(!addr) return false; const erc721 = new ethers.Contract(NFT_ADDRESS, ['function balanceOf(address) view returns (uint256)'], baseReadProvider); const bal = await erc721.balanceOf(addr); return Number(bal.toString ? bal.toString() : bal) > 0; }catch(e){ console.warn('Ownership check failed:', e); return false; } }
 
-  // Optional: Check ERC-721 ownership on Ink via read-only provider
-  async function checkOwnershipOnInk(addr){
-    try{
-      if(!addr) return false;
-      const erc721 = new ethers.Contract(NFT_ADDRESS, ['function balanceOf(address) view returns (uint256)'], baseReadProvider);
-      const bal = await erc721.balanceOf(addr);
-      const n = Number(bal.toString ? bal.toString() : bal);
-      return n > 0;
-    }catch(e){
-      console.warn('Ownership check failed:', e);
-      return false;
-    }
-  }catch(e){
-      console.warn('Ownership check failed:', e);
-      return false;
-    }
-  }
-
+  // ===== Connect button =====
   connectBtn.onclick = async () => {
     try {
       const mode = $('signerMode').value;
       if(mode === 'wallet'){
-        if(!window.ethereum) throw new Error('No provider in window.ethereum — install MetaMask or Rabby');
-        // Request accounts first, then ensure the network, then (re)build provider
-        let tmpProvider = new ethers.BrowserProvider(window.ethereum);
-        await tmpProvider.send('eth_requestAccounts', []);
-        appendLog('Wallet connected. Checking/switching to Ink...');
-        await ensureInkNetwork();
-        provider = new ethers.BrowserProvider(window.ethereum);
-        await assertInk(provider);
-        signer = await provider.getSigner();
-        walletAddress = await signer.getAddress();
-        setConnected(true, walletAddress);
-        appendLog('Connected via wallet: ' + walletAddress);
+        if(!window.ethereum) throw new Error('Nessun provider in window.ethereum — installa MetaMask o Rabby');
+        let tmp = new ethers.BrowserProvider(window.ethereum); await tmp.send('eth_requestAccounts', []); appendLog('Wallet connesso. Verifico/passo a Ink...');
+        await ensureInkNetwork(); provider = new ethers.BrowserProvider(window.ethereum); await assertInk(provider);
+        signer = await provider.getSigner(); walletAddress = await signer.getAddress(); setConnected(true, walletAddress); appendLog('Connesso via wallet: ' + walletAddress);
       } else {
-        const rpc = $('rpcUrl').value.trim();
-        const pk = $('privateKey').value.trim();
-        if(!rpc) throw new Error('Please provide RPC URL for Private Key mode');
-        if(!pk) throw new Error('Please provide a private key (local testing only)');
-        provider = new ethers.JsonRpcProvider(rpc);
-        signer = new ethers.Wallet(pk, provider);
-        walletAddress = await signer.getAddress();
-        setConnected(true, walletAddress);
-        appendLog('Connected via Private Key: ' + walletAddress + ' @ ' + rpc);
+        const rpc = $('rpcUrl').value.trim(); const pk = $('privateKey').value.trim(); if(!rpc) throw new Error('Fornisci un RPC per la modalità Private Key'); if(!pk) throw new Error('Fornisci una private key (solo locale)');
+        provider = new ethers.JsonRpcProvider(rpc); signer = new ethers.Wallet(pk, provider); walletAddress = await signer.getAddress(); setConnected(true, walletAddress); appendLog('Connesso via Private Key: ' + walletAddress + ' @ ' + rpc);
       }
-
-      // ownership check on Base (read-only)
-      appendLog('Checking gating NFT ownership on Base...');
-      const has = await checkOwnershipOnInk(walletAddress);
-      if(has){
-        appendLog('Ownership confirmed — access granted.');
-        setAccess(true);
-      } else {
-        appendLog('No gating NFT found — access locked. Redirecting users to Opensea link is available.');
-        setAccess(false);
-      }
-
-      // set session progress to 0 on connect
+      appendLog('Controllo gating NFT su Base...'); const has = await checkOwnershipOnBase(walletAddress);
+      if(has){ appendLog('Ownership confermata — accesso consentito.'); setAccess(true); } else { appendLog('Nessun gating NFT — accesso bloccato. Apri OpenSea per acquistare.'); setAccess(false); }
       updateProgressBar(0);
-    } catch(e){
-      appendLog('Connection error: ' + (e && e.message ? e.message : String(e)));
-      alert('Connect failed: ' + (e && e.message ? e.message : String(e)));
-      setConnected(false, null);
-      setAccess(false);
-    }
+    } catch(e){ appendLog('Errore connessione: ' + (e && e.message ? e.message : String(e))); alert('Connect fallito: ' + (e && e.message ? e.message : String(e))); setConnected(false, null); setAccess(false); }
   };
 
-  // ---- Factory ABI & tx logic ----
-  const FACTORY_ABI = ['function deployChild() external payable returns (address)'];
+  // ===== Add Ink Network button =====
+  if(addNetBtn){ addNetBtn.onclick = async ()=>{ try{ appendLog('Richiesta add/switch rete Ink...'); await ensureInkNetwork(); appendLog('Rete Ink pronta nel wallet.'); alert('Ink aggiunta/selezionata con successo.'); }catch(e){ appendLog('Add/switch Ink fallito: ' + (e && e.message ? e.message : String(e))); alert('Add/switch Ink fallito: ' + (e && e.message ? e.message : String(e))); } }; }
 
-  async function sendDeploy(factoryAddr, valueWei){
-    const contract = new ethers.Contract(factoryAddr, FACTORY_ABI, signer);
-    return await contract.deployChild({ value: valueWei });
-  }
+  // ===== CSV =====
+  function downloadCsvHandler(){ if(results.length===0){ alert('Nessun risultato da scaricare'); return; } const header=['index','ok','txHash','gasUsed','timeMs','timestamp','error']; const rows = results.map(r=>[r.index,r.ok,r.txHash||'',r.gasUsed||'',r.timeMs||'',r.timestamp||'',r.error? r.error.replace(/[\r\n]+/g,' '):'' ]); const csv=[header,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n'); const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='ink_hunt_benchmark.csv'; a.click(); URL.revokeObjectURL(url); }
 
-  // helper: download CSV (bound to button when access granted)
-  function downloadCsvHandler(){
-    if(results.length === 0){ alert('No results to download'); return; }
-    const header = ['index','ok','txHash','gasUsed','timeMs','timestamp','error'];
-    const rows = results.map(r => [ r.index, r.ok, r.txHash||'', r.gasUsed||'', r.timeMs||'', r.timestamp||'', r.error ? r.error.replace(/[\r\n]+/g,' ') : '' ]);
-    const csv = [header, ...rows].map(r => r.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'ink_hunt_benchmark.csv'; a.click();
-    URL.revokeObjectURL(url);
-  }
+  // ===== TX logic =====
+  async function sendDeploy(factoryAddr, valueWei){ const contract = new ethers.Contract(factoryAddr, FACTORY_ABI, signer); return await contract.deployChild({ value: valueWei }); }
 
-  // progress UI
-  function updateProgressBar(successCount){
-    const pb = $('progressBar');
-    const pt = $('progressText');
-    const hint = $('progressHint');
-    const rocket = $('progressRocket');
-    if(!pb || !pt) return;
-    const cap = 50;
-    const within = successCount % cap;
-    const pct = Math.min(100, Math.round((within / cap) * 100));
-    pb.style.width = pct + '%';
-    pt.textContent = `${within} / ${cap}`;
-    if(rocket){
-      const offsetPx = 10;
-      rocket.style.left = `calc(${pct}% - ${offsetPx}px)`;
-    }
-    hint.textContent = `New tier every 50 successful orders. Current session: ${successCount}.`;
-  }
-
-  // main runner
   async function startSequence(){
-    STOP = false;
-    results = [];
-    $('m_total').textContent = '0'; $('m_success').textContent = '0'; $('m_failed').textContent = '0'; $('m_gas').textContent = '0';
-    updateProgressBar(0);
-
-    const factory = $('factoryAddress').value.trim();
-    if(!factory){ alert('Enter Factory address first'); return; }
-    if(!signer){ alert('Connect a signer first'); return; }
-
-    const count = Math.max(1, Number(($('count').value||'1')));
-    const valueEth = $('valueEth').value || '0';
-    let valueWei; try{ valueWei = ethers.parseEther(String(valueEth)); }catch(e){ alert('Invalid ETH value'); return; }
-    const parallel = $('parallel').value === '1';
-    const delayMs = Number($('delayMs').value || 0);
-
-    appendLog(`Hunting: ${count} orders — value ${valueEth} ETH — mode: ${parallel ? 'PARALLEL' : 'SEQUENTIAL'}`);
-
+    STOP=false; results=[]; $('m_total').textContent='0'; $('m_success').textContent='0'; $('m_failed').textContent='0'; $('m_gas').textContent='0'; updateProgressBar(0);
+    const factory = ($('factoryAddress').value||'').trim(); if(!factory){ alert('Inserisci l\'indirizzo Factory'); return; } if(!signer){ alert('Connetti un signer prima'); return; }
+    const count = Math.max(1, Number(($('count').value||'1'))); const valueEth = $('valueEth').value || '0'; let valueWei; try{ valueWei = ethers.parseEther(String(valueEth)); }catch(e){ alert('Valore ETH non valido'); return; }
+    const parallel = $('parallel').value === '1'; const delayMs = Number($('delayMs').value || 0);
+    appendLog(`Hunting: ${count} ordini — value ${valueEth} ETH — mode: ${parallel? 'PARALLELA':'SEQUENZIALE'}`);
     const start = Date.now();
-    if(parallel){
-      const promises = [];
-      for(let i=0;i<count;i++){
-        if(STOP) break;
-        promises.push((async (idx)=>{
-          const t0 = Date.now();
-          try{
-            const tx = await sendDeploy(factory, valueWei);
-            const receipt = await tx.wait();
-            const gasUsed = Number(receipt.gasUsed.toString());
-            const took = Date.now() - t0;
-            appendLog(`OK #${idx+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`);
-            results.push({ index: idx+1, ok:true, txHash: receipt.hash, gasUsed, timeMs: took, timestamp: Date.now() });
-            updateMetrics();
-          }catch(err){
-            appendLog(`ERR #${idx+1} ${(err && err.message) ? err.message : String(err)}`);
-            results.push({ index: idx+1, ok:false, error: (err && err.message) || String(err), timeMs: Date.now() });
-            updateMetrics();
-          }
-        })(i));
-      }
-      await Promise.all(promises);
-    } else {
-      for(let i=0;i<count;i++){
-        if(STOP) break;
-        const t0 = Date.now();
-        try{
-          const tx = await sendDeploy(factory, valueWei);
-          const receipt = await tx.wait();
-          const gasUsed = Number(receipt.gasUsed.toString());
-          const took = Date.now() - t0;
-          appendLog(`OK #${i+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`);
-          results.push({ index: i+1, ok:true, txHash: receipt.hash, gasUsed, timeMs: took, timestamp: Date.now() });
-          updateMetrics();
-        }catch(err){
-          appendLog(`ERR #${i+1} ${(err && err.message) ? err.message : String(err)}`);
-          results.push({ index: i+1, ok:false, error: (err && err.message) || String(err), timeMs: Date.now() });
-          updateMetrics();
-        }
-        if(delayMs) await new Promise(r=>setTimeout(r, delayMs));
-      }
-    }
-
-    const elapsed = Date.now() - start;
-    $('elapsed').textContent = elapsed + 'ms';
-    appendLog('Hunt complete — elapsed ' + elapsed + 'ms');
-    stopBtn.disabled = true;
+    if(parallel){ const ps=[]; for(let i=0;i<count;i++){ if(STOP) break; ps.push((async(idx)=>{ const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${idx+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`); results.push({index:idx+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${idx+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:idx+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } })(i)); } await Promise.all(ps); }
+    else { for(let i=0;i<count;i++){ if(STOP) break; const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${i+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`); results.push({index:i+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${i+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:i+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } if(delayMs) await new Promise(r=>setTimeout(r, delayMs)); } }
+    const elapsed = Date.now()-start; $('elapsed').textContent = elapsed + 'ms'; appendLog('Hunt completa — elapsed ' + elapsed + 'ms'); stopBtn.disabled = true;
   }
 
-  function updateMetrics(){
-    const total = results.length;
-    const succ = results.filter(r=>r.ok).length;
-    const fail = total - succ;
-    const gas = results.filter(r=>r.ok).reduce((s,r)=> s + (r.gasUsed||0), 0);
-    $('m_total').textContent = total;
-    $('m_success').textContent = succ;
-    $('m_failed').textContent = fail;
-    $('m_gas').textContent = gas;
-    stopBtn.disabled = false;
-    updateProgressBar(succ);
-  }
-
-  // initially bind a friendly handler so button doesn't throw when gated
-  startBtn.onclick = () => { alert('Connect your wallet and hold The Citadel Spaceship NFT on Base to unlock this feature.'); };
-  downloadCsv.onclick = () => { alert('Connect first to unlock downloads.'); };
-
+  // ===== Init =====
+  window.addEventListener('DOMContentLoaded', ()=>{
+    setAccess(false);
+    const modeSel=$('signerMode'), pkEl=$('privateKey'), rpcEl=$('rpcUrl');
+    function syncMode(){ const mode=modeSel.value; if(pkEl) pkEl.style.display = (mode==='pk') ? '' : 'none'; if(rpcEl) rpcEl.placeholder = (mode==='pk') ? 'RPC (es. https://rpc-gel.inkonchain.com o http://127.0.0.1:8545)' : 'RPC (opzionale)'; }
+    if(modeSel){ modeSel.addEventListener('change', syncMode); syncMode(); }
+    $('factoryAddress').value = FACTORY_ADDRESS_DEFAULT;
+    // safe defaults for disabled primary actions until gate ok
+    startBtn.onclick = () => alert('Serve l\'NFT The Citadel Spaceship su Base per sbloccare.');
+    downloadCsv.onclick = () => alert('Collegati e supera il gate per abilitare il download.');
+  });
 })();
 </script>
 </body>
