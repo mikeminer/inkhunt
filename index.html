@@ -94,7 +94,7 @@
 
         <div style="height:12px"></div>
         <label>Starbase Deployment Portal on INK</label>
-        <input id="factoryAddress" placeholder="0x10305c233bd96fF9C1dac42636ABBEFa341C7d13"/>
+        <input id="factoryAddress" placeholder="0x... (Factory with deployChild)"/>
 
         <div style="height:8px"></div>
         <label>Connection</label>
@@ -215,8 +215,20 @@
   // Prefill factory and set initial access
   window.addEventListener('DOMContentLoaded', ()=>{
     const el = $('factoryAddress'); if(el && !el.value) el.value = FACTORY_PREFILL;
-    // Initially buttons disabled until connect & (optional) ownership check
     setAccess(false);
+    // toggle inputs for signer mode
+    const modeSel = $('signerMode');
+    const pkEl = $('privateKey');
+    const rpcEl = $('rpcUrl');
+    function syncMode(){
+      const mode = modeSel.value;
+      if(pkEl) pkEl.style.display = (mode === 'pk') ? '' : 'none';
+      if(rpcEl) rpcEl.placeholder = (mode === 'pk') ? 'RPC (e.g. https://rpc-gel.inkonchain.com or http://127.0.0.1:8545)' : 'RPC (optional)';
+    }
+    if(modeSel){
+      modeSel.addEventListener('change', syncMode);
+      syncMode();
+    }
   });
 
   function appendLog(msg){
@@ -260,6 +272,28 @@
     if (net.chainId !== INK_CHAIN_ID) throw new Error("Please switch to Ink (chainId 57073).");
   }
 
+  // Ensure the user's wallet is on Ink; if not, attempt to switch/add it
+  async function ensureInkNetwork(){
+    const ethereum = window.ethereum;
+    if(!ethereum) throw new Error('No provider in window.ethereum — install MetaMask or Rabby');
+    try{
+      await ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:'0xdef1' }] });
+    }catch(switchErr){
+      if(switchErr && switchErr.code === 4902){
+        // Chain not added — add Ink
+        await ethereum.request({ method:'wallet_addEthereumChain', params:[{
+          chainId: '0xdef1',
+          chainName: 'Ink',
+          rpcUrls: ['https://rpc-gel.inkonchain.com'],
+          nativeCurrency: { name:'Ether', symbol:'ETH', decimals:18 },
+          blockExplorerUrls: ['https://explorer.inkonchain.com']
+        }]});
+      } else {
+        throw switchErr;
+      }
+    }
+  }
+
   // Optional: Check ERC-721 ownership on Ink via read-only provider
   async function checkOwnershipOnInk(addr){
     try{
@@ -283,8 +317,12 @@
       const mode = $('signerMode').value;
       if(mode === 'wallet'){
         if(!window.ethereum) throw new Error('No provider in window.ethereum — install MetaMask or Rabby');
+        // Request accounts first, then ensure the network, then (re)build provider
+        let tmpProvider = new ethers.BrowserProvider(window.ethereum);
+        await tmpProvider.send('eth_requestAccounts', []);
+        appendLog('Wallet connected. Checking/switching to Ink...');
+        await ensureInkNetwork();
         provider = new ethers.BrowserProvider(window.ethereum);
-        await provider.send('eth_requestAccounts', []);
         await assertInk(provider);
         signer = await provider.getSigner();
         walletAddress = await signer.getAddress();
@@ -296,29 +334,28 @@
         if(!rpc) throw new Error('Please provide RPC URL for Private Key mode');
         if(!pk) throw new Error('Please provide a private key (local testing only)');
         provider = new ethers.JsonRpcProvider(rpc);
-        // Optionally enforce Ink network here:
-        // await assertInk(provider);
         signer = new ethers.Wallet(pk, provider);
         walletAddress = await signer.getAddress();
         setConnected(true, walletAddress);
         appendLog('Connected via Private Key: ' + walletAddress + ' @ ' + rpc);
       }
 
-      // ownership check on Ink (read-only)
+      // ownership check on Base (read-only)
       appendLog('Checking gating NFT ownership on Base...');
       const has = await checkOwnershipOnInk(walletAddress);
       if(has){
         appendLog('Ownership confirmed — access granted.');
         setAccess(true);
       } else {
-        appendLog('No gating NFT found — access locked.');
+        appendLog('No gating NFT found — access locked. Redirecting users to Opensea link is available.');
         setAccess(false);
       }
 
       // set session progress to 0 on connect
       updateProgressBar(0);
     } catch(e){
-      appendLog('Connection error: ' + (e.message || e));
+      appendLog('Connection error: ' + (e && e.message ? e.message : String(e)));
+      alert('Connect failed: ' + (e && e.message ? e.message : String(e)));
       setConnected(false, null);
       setAccess(false);
     }
