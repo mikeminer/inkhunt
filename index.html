@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Kraken Hunt — Ink Mission Control (Gated)</title>
-  <link rel="icon" type="image/x-icon" href=""/>
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/mikeminer/lineavoyage/refs/heads/main/icon.ico"/>
 <style>
   :root{
     /* Kraken Hunt — deep ocean + violet glow */
@@ -133,6 +133,7 @@
 
         <div class="row" style="margin-top:8px">
           <button id="connectBtn">Connect</button>
+          <button id="addNetBtn" class="ghost">Add Ink Network</button>
           <button id="startBtn" class="ghost big" disabled>Start Hunt</button>
           <button id="stopBtn" class="ghost" disabled>Abort</button>
           <button id="downloadCsv" class="ghost" disabled>Download CSV</button>
@@ -206,6 +207,7 @@
   const $ = id => document.getElementById(id);
   const connectBtn = $('connectBtn'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), downloadCsv = $('downloadCsv');
   const logEl = $('log'), connectedEl = $('connected'), accountEl = $('account'), banner = $('accessBanner');
+  const addNetBtn = $('addNetBtn');
 
   let provider, signer, walletAddress = null;
   let baseReadProvider = new ethers.JsonRpcProvider(BASE_RPC);
@@ -280,7 +282,6 @@
       await ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:'0xdef1' }] });
     }catch(switchErr){
       if(switchErr && switchErr.code === 4902){
-        // Chain not added — add Ink
         await ethereum.request({ method:'wallet_addEthereumChain', params:[{
           chainId: '0xdef1',
           chainName: 'Ink',
@@ -292,6 +293,22 @@
         throw switchErr;
       }
     }
+  }
+
+  // Add/switch Ink Network button
+  if (addNetBtn) {
+    addNetBtn.onclick = async ()=>{
+      try{
+        appendLog('Requesting wallet to add/switch to Ink network...');
+        await ensureInkNetwork();
+        appendLog('Ink network is ready in wallet.');
+        alert('Ink network added/switched successfully.');
+      }catch(e){
+        appendLog('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e)));
+        alert('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e)));
+      }
+    };
+  }
   }
 
   // Optional: Check ERC-721 ownership on Ink via read-only provider
