@@ -10,7 +10,7 @@ Send a **burst of deploy transactions** to a Factory contract (`deployChild()`) 
 ✅ Gas consumption  
 ✅ Success/failure rates  
 
-> ⚠️ **Access is gated** — users must hold **The Citadel Spaceship** NFT on **Base** to unlock the deployment engine.
+> ⚠️ **Access is gated** — users must hold **The Citadel Spaceship** NFT on **Base** to unlock the deployment engine. You will find all the details inside the dapp.
 
 ---
 
