@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>🦑 Kraken Hunt — Ink Mission Control</title>
+<title>🦑 Ink Hunt — Mission Control</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='10' y='70' font-size='70'>🦑</text></svg>">
 <style>
   :root{
@@ -54,10 +54,9 @@
   .progressLabel{ display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted); margin-bottom:6px; }
   .progressTrack{ height:10px; border-radius:999px; background:rgba(123,92,255,.20); overflow:hidden; position:relative; }
   .progressBar{ height:100%; width:0%; background:linear-gradient(90deg, var(--accent), #5a42ff); box-shadow:0 0 14px rgba(123,92,255,.55); transition: width .35s ease; }
-  .progressRocket{ position:absolute; top:-8px; left:0; font-size:14px; filter: drop-shadow(0 0 6px rgba(123,92,255,.75)); transition: left .35s ease; pointer-events:none; }
+  .progressIcon{ position:absolute; top:-8px; left:0; font-size:14px; filter: drop-shadow(0 0 6px rgba(123,92,255,.75)); transition: left .35s ease; pointer-events:none; }
   .progressHint{ font-size:11px; color:#d5d0ff; opacity:.9; margin-top:4px; }
 
-  @media (max-width:980px){ .content{ grid-template-columns:1fr; } .log{ height:260px; } }
   /* Membership popup */
   .modalOverlay{ position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter: blur(2px); display:none; align-items:center; justify-content:center; z-index:9999; }
   .modal{ width:min(520px,92vw); background:var(--card); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
@@ -66,6 +65,8 @@
   .modal .actions{ display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
   .btn{ cursor:pointer; border:none; padding:10px 14px; border-radius:12px; font-weight:900; background:linear-gradient(180deg,var(--accent),#5a42ff); color:#0e0a23; box-shadow:0 10px 30px rgba(90,66,255,0.35); }
   .btn.ghost{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.12); box-shadow:none; }
+
+  @media (max-width:980px){ .content{ grid-template-columns:1fr; } .log{ height:260px; } }
 </style>
 </head>
 <body>
@@ -74,7 +75,7 @@
       <div class="brand">
         <div class="logo">INK</div>
         <div>
-          <h1>Kraken Hunt — Ink Mission Control</h1>
+          <h1>Ink Hunt — Mission Control</h1>
           <div class="tagline">OP Stack L2 • EVM‑equivalent • Ink Mainnet</div>
         </div>
       </div>
@@ -89,11 +90,11 @@
     <!-- Membership popup (Base NFT required) -->
     <div id="membershipPopup" class="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mDesc" style="display:none">
       <div class="modal">
-        <h3 id="mTitle">Membership Required<\/h3>
-        <p id="mDesc">To use this dApp you must own the <strong>Citadel Spaceship NFT<\/strong> on <strong>Base<\/strong>. You can purchase it on OpenSea.</p>
+        <h3 id="mTitle">Membership Required</h3>
+        <p id="mDesc">To use this dApp you must own the <strong>Citadel Spaceship NFT</strong> on <strong>Base</strong>. You can purchase it on OpenSea.</p>
         <div class="actions">
-          <button id="mOpenSea" class="btn">Open in OpenSea ↗<\/button>
-          <button id="mClose" class="btn ghost">Close<\/button>
+          <button id="mOpenSea" class="btn">Open in OpenSea ↗</button>
+          <button id="mClose" class="btn ghost">Close</button>
         </div>
       </div>
     </div>
@@ -102,18 +103,18 @@
       <!-- Left: controls -->
       <div class="panel">
         <h3 style="margin:0 0 8px">Launch a Hunt — Deploy & Measure 🦑⚓</h3>
-        <div class="small">Trigger an on‑chain burst to your Factory on <strong>Ink<\/strong> and measure latency, gas, and success/failure rates. No on‑chain self‑replication.<\/div>
+        <div class="small">Trigger an on‑chain burst to your Factory on <strong>Ink</strong> and measure latency, gas, and success/failure rates. No on‑chain self‑replication.</div>
 
         <div style="height:12px"></div>
-        <label>Factory on INK (deployChild)<\/label>
+        <label>Factory on INK (deployChild)</label>
         <input id="factoryAddress" value="0x10305c233bd96fF9C1dac42636ABBEFa341C7d13"/>
 
         <div style="height:8px"></div>
-        <label>Connection<\/label>
+        <label>Connection</label>
         <div class="controls">
           <select id="signerMode">
             <option value="wallet">Browser Wallet (MetaMask / Rabby)</option>
-            <option value="pk">Private Key + RPC (local only)<\/option>
+            <option value="pk">Private Key + RPC (local only)</option>
           </select>
           <input id="rpcUrl" placeholder="RPC (e.g. https://rpc-gel.inkonchain.com or http://127.0.0.1:8545)" style="width:48%"/>
         </div>
@@ -122,35 +123,35 @@
 
         <hr style="opacity:.12; margin:12px 0"/>
 
-        <label>Hunt Plan<\/label>
+        <label>Hunt Plan</label>
         <div class="controls" style="margin-bottom:8px">
           <div style="flex:1">
-            <div class="small"># of Orders<\/div>
+            <div class="small"># of Orders</div>
             <input id="count" type="number" value="25" min="1"/>
           </div>
           <div style="width:160px">
-            <div class="small">ETH per Order<\/div>
+            <div class="small">ETH per Order</div>
             <input id="valueEth" type="text" value="0.000"/>
           </div>
           <div style="width:150px">
-            <div class="small">Delay (ms) — sequential<\/div>
+            <div class="small">Delay (ms) — sequential</div>
             <input id="delayMs" type="number" value="50" min="0"/>
           </div>
           <div style="width:150px">
-            <div class="small">Mode<\/div>
-            <select id="parallel"><option value="0">Sequential<\/option><option value="1">Parallel<\/option></select>
+            <div class="small">Mode</div>
+            <select id="parallel"><option value="0">Sequential</option><option value="1">Parallel</option></select>
           </div>
         </div>
 
         <div class="row" style="margin-top:8px">
           <button id="connectBtn">Connect</button>
           <button id="addNetBtn" class="ghost">Add Ink Network</button>
-          <button id="startBtn" class="ghost big" disabled>Start Hunt</button>
+          <button id="startBtn" class="ghost big" disabled>Deploy</button>
           <button id="stopBtn" class="ghost" disabled>Abort</button>
           <button id="downloadCsv" class="ghost" disabled>Download CSV</button>
         </div>
 
-        <div class="note">⚠️ Use only infrastructure you control. This dApp calls <code>deployChild()<\/code> on your Factory and forwards ETH if set — it does <b>not<\/b> self‑replicate on‑chain.<\/div>
+        <div class="note">⚠️ Use only infrastructure you control. This dApp calls <code>deployChild()</code> on your Factory and forwards ETH if set — it does <b>not</b> self‑replicate on‑chain.</div>
       </div>
 
       <!-- Right: telemetry -->
@@ -158,7 +159,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>Telemetry</strong>
-            <div class="small">Track orders, timings and gas as you hunt the depths.<\/div>
+            <div class="small">Track orders, timings and gas as you hunt the depths.</div>
           </div>
           <div class="small">Elapsed: <span id="elapsed">0ms</span></div>
         </div>
@@ -173,7 +174,7 @@
           </div>
           <div class="progressTrack">
             <div class="progressBar" id="progressBar"></div>
-            <div class="progressRocket" id="progressRocket">🦑</div>
+            <div class="progressIcon" id="progressIcon">🦑</div>
           </div>
           <div class="progressHint" id="progressHint">New tier every 50 successful orders. Release the Kraken.</div>
         </div>
@@ -188,12 +189,12 @@
         </div>
 
         <div style="height:8px"></div>
-        <div class="small">Tip: test with a single order first to validate Factory & parameters before going full speed.<\/div>
+        <div class="small">Tip: test with a single order first to validate Factory & parameters before going full speed.</div>
       </div>
     </div>
 
     <footer>
-      <div>© Kraken Hunt — Ink Mission Control • For private testing & research</div>
+      <div>© Ink Hunt — Mission Control • For private testing & research</div>
       <div class="small">Ink Mainnet • Chain ID <code>57073</code> • Explorer: <code>explorer.inkonchain.com</code></div>
     </footer>
   </div>
@@ -207,7 +208,7 @@
   const INK_RPC = 'https://rpc-gel.inkonchain.com';
   const INK_EXPLORER = 'https://explorer.inkonchain.com';
 
-  // ===== Strict NFT gate on BASE (original requirement) =====
+  // ===== Strict NFT gate on BASE =====
   const NFT_ADDRESS = '0x67e2f3a9b7fe9979e3b4a5e557b59e9c93331c4f'.toLowerCase(); // The Citadel Spaceship
   const BASE_RPC = 'https://mainnet.base.org';
   const OPENSEA_URL = 'https://opensea.io/collection/0x0df998573b34a1a2932998a8376052f230ef8e92/overview';
@@ -220,6 +221,10 @@
   const connectBtn = $('connectBtn'), addNetBtn = $('addNetBtn'), startBtn = $('startBtn'), stopBtn = $('stopBtn'), downloadCsv = $('downloadCsv');
   const logEl = $('log'), connectedEl = $('connected'), accountEl = $('account'), banner = $('accessBanner');
 
+  const mOpenSea = $('mOpenSea');
+  const mClose = $('mClose');
+  const membershipPopup = $('membershipPopup');
+
   let provider, signer, walletAddress = null;
   let baseReadProvider = new ethers.JsonRpcProvider(BASE_RPC);
   let STOP = false; let results = [];
@@ -229,7 +234,7 @@
   function setConnected(ok, addr){ connectedEl.textContent = ok ? 'Yes' : 'No'; accountEl.textContent = addr || '—'; }
   function updateProgressBar(successCount){
     const cap = 50; const within = successCount % cap; const pct = Math.min(100, Math.round((within / cap) * 100));
-    $('progressBar').style.width = pct + '%'; $('progressText').textContent = `${within} / ${cap}`; $('progressRocket').style.left = `calc(${pct}% - 10px)`; $('progressHint').textContent = `New tier every 50 successful orders. Session: ${successCount}.`;
+    $('progressBar').style.width = pct + '%'; $('progressText').textContent = `${within} / ${cap}`; $('progressIcon').style.left = `calc(${pct}% - 10px)`; $('progressHint').textContent = `New tier every 50 successful orders. Session: ${successCount}.`;
   }
   function updateMetrics(){ const total = results.length; const succ = results.filter(r=>r.ok).length; const gas = results.filter(r=>r.ok).reduce((s,r)=> s + (r.gasUsed||0), 0); $('m_total').textContent = total; $('m_success').textContent = succ; $('m_failed').textContent = total - succ; $('m_gas').textContent = gas; stopBtn.disabled = false; updateProgressBar(succ); }
 
@@ -237,17 +242,12 @@
     startBtn.disabled = !allowed; downloadCsv.disabled = !allowed; stopBtn.disabled = !allowed;
     if(!allowed){
       banner.style.display = 'flex'; banner.className = 'banner warn';
-      banner.innerHTML = `<div style="flex:1">You must hold <strong>The Citadel Spaceship<\/strong> NFT on <strong>Base</strong> to use this dApp.</div><div><a href="${OPENSEA_URL}" target="_blank" rel="noopener">Buy on OpenSea ↗</a></div>`;
+      banner.innerHTML = `<div style="flex:1">You must hold <strong>The Citadel Spaceship</strong> NFT on <strong>Base</strong> to use this dApp.</div><div><a href="${OPENSEA_URL}" target="_blank" rel="noopener">Buy on OpenSea ↗</a></div>`;
       startBtn.onclick = () => window.open(OPENSEA_URL, '_blank'); downloadCsv.onclick = () => alert('Download disabled: membership NFT required.'); stopBtn.onclick = () => appendLog('Abort disabled: no access.');
-    } else { banner.style.display = 'none'; startBtn.onclick = startSequence; downloadCsv.onclick = downloadCsvHandler; stopBtn.onclick = () => { STOP = true; appendLog('Abort richiesto'); stopBtn.disabled = true; }; }
+    } else { banner.style.display = 'none'; startBtn.onclick = startSequence; downloadCsv.onclick = downloadCsvHandler; stopBtn.onclick = () => { STOP = true; appendLog('Abort requested'); stopBtn.disabled = true; }; }
   }
 
-  // ===== Membership popup helpers =====
-  const OPENSEA_URL = 'https://opensea.io/collection/0x0df998573b34a1a2932998a8376052f230ef8e92/overview';
-  function showMembershipPopup(){ const el = document.getElementById('membershipPopup'); if(el) el.style.display = 'flex'; }
-  function hideMembershipPopup(){ const el = document.getElementById('membershipPopup'); if(el) el.style.display = 'none'; }
-
-// ===== Wallet helpers =====
+  // ===== Wallet helpers =====
   async function ensureInkNetwork(){
     const ethereum = window.ethereum; if(!ethereum) throw new Error('No provider in window.ethereum — install MetaMask or Rabby');
     try{ await ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId: INK_CHAIN_ID_HEX }] }); }
@@ -257,6 +257,10 @@
 
   // ===== Gating on Base =====
   async function checkOwnershipOnBase(addr){ try{ if(!addr) return false; const erc721 = new ethers.Contract(NFT_ADDRESS, ['function balanceOf(address) view returns (uint256)'], baseReadProvider); const bal = await erc721.balanceOf(addr); return Number(bal.toString ? bal.toString() : bal) > 0; }catch(e){ console.warn('Ownership check failed:', e); return false; } }
+  function showMembershipPopup(){ if(membershipPopup) membershipPopup.style.display = 'flex'; }
+  function hideMembershipPopup(){ if(membershipPopup) membershipPopup.style.display = 'none'; }
+  if(mOpenSea){ mOpenSea.onclick = ()=> window.open(OPENSEA_URL, '_blank'); }
+  if(mClose){ mClose.onclick = hideMembershipPopup; }
 
   // ===== Connect button =====
   connectBtn.onclick = async () => {
@@ -272,14 +276,13 @@
         provider = new ethers.JsonRpcProvider(rpc); signer = new ethers.Wallet(pk, provider); walletAddress = await signer.getAddress(); setConnected(true, walletAddress); appendLog('Connected via Private Key: ' + walletAddress + ' @ ' + rpc);
       }
       appendLog('Checking gating NFT ownership on Base...'); const has = await checkOwnershipOnBase(walletAddress);
-      if(has){ appendLog('Ownership confirmed — access granted.'); setAccess(true); }
-      else { appendLog('No gating NFT found — access locked. A Base membership is required.'); setAccess(false); showMembershipPopup(); }
+      if(has){ appendLog('Ownership confirmed — access granted.'); hideMembershipPopup(); setAccess(true); } else { appendLog('No gating NFT found — access locked. A Base membership is required.'); setAccess(false); showMembershipPopup(); }
       updateProgressBar(0);
     } catch(e){ appendLog('Connection error: ' + (e && e.message ? e.message : String(e))); alert('Connect failed: ' + (e && e.message ? e.message : String(e))); setConnected(false, null); setAccess(false); }
   };
 
   // ===== Add Ink Network button =====
-  if(addNetBtn){ addNetBtn.onclick = async ()=>{ try{ appendLog('Requesting add/switch to Ink network...'); await ensureInkNetwork(); appendLog('Ink network is ready in wallet.'); alert('Ink added/switched successfully.'); }catch(e){ appendLog('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e))); alert('Add/switch Ink fallito: ' + (e && e.message ? e.message : String(e))); } }; }
+  if(addNetBtn){ addNetBtn.onclick = async ()=>{ try{ appendLog('Requesting add/switch to Ink network...'); await ensureInkNetwork(); appendLog('Ink network is ready in wallet.'); alert('Ink added/switched successfully.'); }catch(e){ appendLog('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e))); alert('Add/switch Ink failed: ' + (e && e.message ? e.message : String(e))); } }; }
 
   // ===== CSV =====
   function downloadCsvHandler(){ if(results.length===0){ alert('No results to download'); return; } const header=['index','ok','txHash','gasUsed','timeMs','timestamp','error']; const rows = results.map(r=>[r.index,r.ok,r.txHash||'',r.gasUsed||'',r.timeMs||'',r.timestamp||'',r.error? r.error.replace(/[\r\n]+/g,' '):'' ]); const csv=[header,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n'); const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='ink_hunt_benchmark.csv'; a.click(); URL.revokeObjectURL(url); }
@@ -294,8 +297,10 @@
     const parallel = $('parallel').value === '1'; const delayMs = Number($('delayMs').value || 0);
     appendLog(`Deploying: ${count} orders — value ${valueEth} ETH — mode: ${parallel? 'PARALLEL':'SEQUENTIAL'}`);
     const start = Date.now();
-    if(parallel){ const ps=[]; for(let i=0;i<count;i++){ if(STOP) break; ps.push((async(idx)=>{ const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${idx+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`); results.push({index:idx+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${idx+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:idx+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } })(i)); } await Promise.all(ps); }
-    else { for(let i=0;i<count;i++){ if(STOP) break; const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${i+1} tx=${receipt.hash} gas=${gasUsed} time=${took}ms`); results.push({index:i+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${i+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:i+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } if(delayMs) await new Promise(r=>setTimeout(r, delayMs)); } }
+    const openTxLink = (hash)=> `${INK_EXPLORER}/tx/${hash}`;
+
+    if(parallel){ const ps=[]; for(let i=0;i<count;i++){ if(STOP) break; ps.push((async(idx)=>{ const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${idx+1} tx=${receipt.hash} (${openTxLink(receipt.hash)}) gas=${gasUsed} time=${took}ms`); results.push({index:idx+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${idx+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:idx+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } })(i)); } await Promise.all(ps); }
+    else { for(let i=0;i$count;i++){ if(STOP) break; const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${i+1} tx=${receipt.hash} (${openTxLink(receipt.hash)}) gas=${gasUsed} time=${took}ms`); results.push({index:i+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${i+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:i+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } if(delayMs) await new Promise(r=>setTimeout(r, delayMs)); } }
     const elapsed = Date.now()-start; $('elapsed').textContent = elapsed + 'ms'; appendLog('Hunt complete — elapsed ' + elapsed + 'ms'); stopBtn.disabled = true;
   }
 
@@ -303,18 +308,12 @@
   window.addEventListener('DOMContentLoaded', ()=>{
     setAccess(false);
     const modeSel=$('signerMode'), pkEl=$('privateKey'), rpcEl=$('rpcUrl');
-    function syncMode(){ const mode=modeSel.value; if(pkEl) pkEl.style.display = (mode==='pk') ? '' : 'none'; if(rpcEl) rpcEl.placeholder = (mode==='pk') ? 'RPC (es. https://rpc-gel.inkonchain.com o http://127.0.0.1:8545)' : 'RPC (opzionale)'; }
+    function syncMode(){ const mode=modeSel.value; if(pkEl) pkEl.style.display = (mode==='pk') ? '' : 'none'; if(rpcEl) rpcEl.placeholder = (mode==='pk') ? 'RPC (e.g. https://rpc-gel.inkonchain.com or http://127.0.0.1:8545)' : 'RPC (optional)'; }
     if(modeSel){ modeSel.addEventListener('change', syncMode); syncMode(); }
     $('factoryAddress').value = FACTORY_ADDRESS_DEFAULT;
     // safe defaults for disabled primary actions until gate ok
     startBtn.onclick = () => alert('You must hold the The Citadel Spaceship NFT on Base to unlock.');
     downloadCsv.onclick = () => alert('Connect and pass the gate to enable downloads.');
-
-    // Popup hooks
-    const mOpenSea = document.getElementById('mOpenSea');
-    const mClose = document.getElementById('mClose');
-    if(mOpenSea){ mOpenSea.onclick = ()=> window.open(OPENSEA_URL, '_blank'); }
-    if(mClose){ mClose.onclick = hideMembershipPopup; }
   });
 })();
 </script>
