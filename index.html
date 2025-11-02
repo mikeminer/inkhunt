@@ -292,6 +292,8 @@
 
   async function startSequence(){
     STOP=false; results=[]; $('m_total').textContent='0'; $('m_success').textContent='0'; $('m_failed').textContent='0'; $('m_gas').textContent='0'; updateProgressBar(0);
+    // Safety: ensure we're on Ink before attempting a tx
+    try { if(provider) await assertInk(provider); } catch(e){ appendLog('Wrong network: ' + (e && e.message ? e.message : e)); alert('Please switch to Ink and reconnect.'); return; }
     const factory = ($('factoryAddress').value||'').trim(); if(!factory){ alert('Enter Factory address first'); return; } if(!signer){ alert('Connect a signer first'); return; }
     const count = Math.max(1, Number(($('count').value||'1'))); const valueEth = $('valueEth').value || '0'; let valueWei; try{ valueWei = ethers.parseEther(String(valueEth)); }catch(e){ alert('Invalid ETH value'); return; }
     const parallel = $('parallel').value === '1'; const delayMs = Number($('delayMs').value || 0);
@@ -300,7 +302,7 @@
     const openTxLink = (hash)=> `${INK_EXPLORER}/tx/${hash}`;
 
     if(parallel){ const ps=[]; for(let i=0;i<count;i++){ if(STOP) break; ps.push((async(idx)=>{ const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${idx+1} tx=${receipt.hash} (${openTxLink(receipt.hash)}) gas=${gasUsed} time=${took}ms`); results.push({index:idx+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${idx+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:idx+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } })(i)); } await Promise.all(ps); }
-    else { for(let i=0;i$count;i++){ if(STOP) break; const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${i+1} tx=${receipt.hash} (${openTxLink(receipt.hash)}) gas=${gasUsed} time=${took}ms`); results.push({index:i+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${i+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:i+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } if(delayMs) await new Promise(r=>setTimeout(r, delayMs)); } }
+    else { for(let i=0;i<count;i++){ if(STOP) break; const t0=Date.now(); try{ const tx=await sendDeploy(factory, valueWei); const receipt=await tx.wait(); const gasUsed=Number(receipt.gasUsed.toString()); const took=Date.now()-t0; appendLog(`OK #${i+1} tx=${receipt.hash} (${openTxLink(receipt.hash)}) gas=${gasUsed} time=${took}ms`); results.push({index:i+1, ok:true, txHash:receipt.hash, gasUsed, timeMs:took, timestamp:Date.now()}); updateMetrics(); }catch(err){ appendLog(`ERR #${i+1} ${(err && err.message)? err.message: String(err)}`); results.push({index:i+1, ok:false, error:(err && err.message)||String(err), timeMs:Date.now()}); updateMetrics(); } if(delayMs) await new Promise(r=>setTimeout(r, delayMs)); } }
     const elapsed = Date.now()-start; $('elapsed').textContent = elapsed + 'ms'; appendLog('Hunt complete — elapsed ' + elapsed + 'ms'); stopBtn.disabled = true;
   }
 
