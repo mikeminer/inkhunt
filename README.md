@@ -66,7 +66,7 @@ Performance comparisons between chains
 Ownership detection performed read-only on Base RPC:
 
 makefile
-Copia codice
+
 NFT: The Citadel Spaceship
 Contract: 0x67e2f3a9b7fe9979e3b4a5e557b59e9c93331c4f
 Chain: Base Mainnet
